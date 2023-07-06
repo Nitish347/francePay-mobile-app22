@@ -28,6 +28,11 @@ class MainMenu extends StatefulWidget {
 
 class MainMenuState extends State<MainMenu> {
   final accountController = Get.put(AccountController());
+  @override
+  void initState() {
+    // TODO: implement initState
+    AccountController().GetAllRequest();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -92,8 +97,11 @@ class MainMenuState extends State<MainMenu> {
                         ),
                         blocks(height, width, "To Bank Account",
                             Icons.account_balance),
-                        blocks(
-                            height, width, "Send Request", Icons.request_page),
+                        InkWell(
+                          onTap: () => Get.toNamed("/contact"),
+                          child: blocks(height, width, "Send Request",
+                              Icons.request_page),
+                        ),
                       ],
                     )),
               ),

@@ -16,16 +16,35 @@ AppBar FpayAppBar(double height, BuildContext context) {
           tooltip: 'Comment Icon',
           onPressed: () {},
         ), //IconButton
-        IconButton(
-          icon: Icon(
-            Icons.notifications,
-          ),
-          tooltip: 'Setting Icon',
-          onPressed: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => RequestScreen()));
-          },
-        ), //IconButton
+
+        Center(child: bellIcon(true, context))
       ],
       backgroundColor: Colors.white);
+}
+
+Widget bellIcon(bool noti, BuildContext context) {
+  return Stack(
+    children: [
+      IconButton(
+        onPressed: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => RequestScreen()));
+        },
+        icon: Icon(Icons.notifications),
+      ),
+      if (noti)
+        Positioned(
+          top: 8.0,
+          right: 8.0,
+          child: Container(
+            width: 10.0,
+            height: 10.0,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.red,
+            ),
+          ),
+        ),
+    ],
+  );
 }

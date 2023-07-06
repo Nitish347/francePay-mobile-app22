@@ -1,62 +1,71 @@
 import 'dart:convert';
 
+import 'package:francepay/app/obsData.dart';
 import 'package:francepay/app/routes/app_pages.dart';
 import 'package:francepay/app/service/network_handler/networkhandler.dart';
 import 'package:get/get.dart';
 import 'package:francepay/app/service/network_handler/networkhandler.dart';
 
-class AccountController extends GetxController {
+import '../models/PendingRQSTModel.dart';
 
+class AccountController extends GetxController {
   RxDouble balance = 0.00.obs;
   RxMap user_data = {}.obs;
   RxBool isLoading = false.obs;
 
-
   // ignore: non_constant_identifier_names
   Future<dynamic> GetWalletBalance() async {
-      isLoading.value = true;
-      var response = await NetWorkHandler.get("balance");
-      if (response != null) {
-        var data = json.decode(response);
-        print(data["balance"]);
-        balance.value = (data["balance"].toDouble());
-        isLoading.value  = false;
-        return data["balance"];
-      }
+    isLoading.value = true;
+    var response = await NetWorkHandler.get("balance");
+    if (response != null) {
+      var data = json.decode(response);
+      print(data["balance"]);
+      balance.value = (data["balance"].toDouble());
+      isLoading.value = false;
+      return data["balance"];
+    }
+  }
 
+  Future<dynamic> GetAllRequest() async {
+    ObsData controller = Get.put(ObsData());
+    controller.clearList();
+
+    var response = await NetWorkHandler.get("getpaymentreq");
+    if (response != null) {
+      var data = json.decode(response);
+      print(data["data"]);
+      for (Map<String, dynamic> mp in data["data"]) {
+        PendingRequestsModel pendingRequestModel =
+            PendingRequestsModel.fromJson(mp);
+        controller.addItem(pendingRequestModel);
+      }
+    }
   }
 
   Future<dynamic> GetCurrentUser() async {
-    isLoading.value  = true;
+    isLoading.value = true;
     print("This work $isLoading.value ");
     String? token = await NetWorkHandler.getToken();
     if (token != null) {
-      String? response = await NetWorkHandler.check_auth_user(
-          token, "/api/user");
+      String? response =
+          await NetWorkHandler.check_auth_user(token, "/api/user");
       var data = json.decode(response);
 
       if (data["status"] == "success") {
         print("Data get success");
         user_data.value = data["data"];
         return data["data"];
-
-      }
-      else {
+      } else {
         print("Something went wrong while checking token");
       }
     }
 
-    isLoading.value  = false;
+    isLoading.value = false;
     print(isLoading.value);
   }
 
-
-
-
-
   Future<dynamic> FetchTran() async {
     var data = json.encode({});
-
 
     var response = await NetWorkHandler.get("all_transactions?limit=10");
     if (response != null) {
@@ -66,10 +75,8 @@ class AccountController extends GetxController {
     }
   }
 
-
   Future<dynamic> FetchallCard() async {
     var data = json.encode({});
-
 
     var response = await NetWorkHandler.auth_post(data, "fetch_card");
     if (response != null) {
@@ -79,21 +86,16 @@ class AccountController extends GetxController {
     }
   }
 
-
-
   Future<dynamic> FetchallBank() async {
-
     var data = json.encode({});
 
-
-    var response = await NetWorkHandler.auth_post(data,"fetch_bank");
+    var response = await NetWorkHandler.auth_post(data, "fetch_bank");
     if (response != null) {
       print(response);
       var data = json.decode(response);
       return data;
 
-
-   /*   if(data['status'] == true){
+      /*   if(data['status'] == true){
         return {
           "status" : true,
           "msg" : data['msg'],
@@ -117,18 +119,14 @@ class AccountController extends GetxController {
         };
 
       }*/
-
     }
-
   }
-
 
   @override
   Future<void> onInit() async {
     super.onInit();
     await GetWalletBalance();
     await GetCurrentUser();
-
   }
 
   @override
@@ -138,7 +136,6 @@ class AccountController extends GetxController {
 
   @override
   void onClose() {}
-
 }
 
 class GlobalEntity {
@@ -148,10 +145,10 @@ class GlobalEntity {
   String? countries;
   String? lastUpdate;
 
-  GlobalEntity({
-    this.dailySummary,
-    this.image,
-    this.source,
-    this.countries,
-    this.lastUpdate});
+  GlobalEntity(
+      {this.dailySummary,
+      this.image,
+      this.source,
+      this.countries,
+      this.lastUpdate});
 }

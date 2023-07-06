@@ -18,7 +18,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.16.2 <3.0.0"
+  sdk: ">=2.19.2 <3.0.0"
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -45,7 +45,7 @@ dependencies:
   quickalert:
   share: ^2.0.4
   intl: ^0.18.0
-  pinput: ^2.2.21
+  pinput:
 
   google_fonts:
   stylish_bottom_bar: ^1.0.0
@@ -57,6 +57,7 @@ dependencies:
   country_phone_code_picker: ^0.0.43
   intl_phone_field: ^3.1.0
   lottie:
+
   number_to_words: ^1.0.0
   animated_segmented_tab_control: ^1.0.1
 
@@ -86,6 +87,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
       - assets/images/
+      - assets/lotties/sent.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

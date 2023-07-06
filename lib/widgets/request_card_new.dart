@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
 import '../Constants/Constants.dart';
 
 Widget RequestCard(double width, double heigth, String title, String buttonText,
-    String svgPath, Color color, String value) {
+    String id, String svgPath, Color color, String value, String date) {
   return Padding(
     padding: EdgeInsets.only(top: heigth * 0.015, left: 5, right: 5),
     child: Container(
@@ -48,7 +49,7 @@ Widget RequestCard(double width, double heigth, String title, String buttonText,
                           ],
                         ),
                         Text(
-                          "8840867665@fpay",
+                          "$id@fpay",
                           style: TextStyle(
                               color: Color(0xff25262C),
                               fontSize: heigth * 0.015),
@@ -84,9 +85,9 @@ Widget RequestCard(double width, double heigth, String title, String buttonText,
                     height: 5,
                   ),
                   Text(
-                    "12/05/2005",
+                    DateFormat('dd/MM/yy').format(DateTime.parse(date)),
                     style: TextStyle(
-                        color: Color(0xff25262C), fontSize: heigth * 0.015),
+                        color: Color(0xff25262C), fontSize: heigth * 0.018),
                   )
                 ],
               )

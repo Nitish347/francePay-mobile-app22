@@ -4,8 +4,8 @@ import 'package:francepay/app/controllers/transfer_controller.dart';
 import 'package:francepay/app/service/network_handler/networkhandler.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../widgets/logo.dart';
-import 'PinPage.dart';
+import '../../widgets/logo.dart';
+import '../../pages/PinPage.dart';
 
 class FpayIdPaymentScreen extends StatefulWidget {
   const FpayIdPaymentScreen({Key? key}) : super(key: key);

@@ -9,6 +9,8 @@ import 'app/routes/app_pages.dart';
 
 import 'package:get/get.dart';
 
+import 'app/views/contact.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -23,6 +25,7 @@ class MyApp extends StatelessWidget {
       title: 'Fpay Wallet',
       initialRoute: AppPages.INITIAL,
       getPages: AppPages.routes,
+      // home: ContactsPage(),
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
           // primarySwatch: Colors.blue,

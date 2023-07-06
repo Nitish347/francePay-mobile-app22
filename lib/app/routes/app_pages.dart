@@ -4,6 +4,7 @@ import 'package:francepay/app/bindings/transfer_binding.dart';
 
 import 'package:francepay/app/middleware/auth_middleware.dart';
 import 'package:francepay/app/middleware/first_middleware.dart';
+import 'package:francepay/app/views/contact.dart';
 import 'package:francepay/app/views/pages/tran_msg.dart';
 import 'package:francepay/app/views/profile.dart';
 
@@ -11,7 +12,7 @@ import 'package:francepay/app/views/signIn.dart';
 import 'package:francepay/pages/confirmationMail.dart';
 import 'package:francepay/pages/newPayment.dart';
 import 'package:francepay/app/views/signup/phoneNumber.dart';
-import 'package:francepay/pages/payment_by_fpay.dart';
+import 'package:francepay/app/views/payment_by_fpay.dart';
 import 'package:francepay/pages/payments.dart';
 import 'package:francepay/pages/test.dart';
 import 'package:francepay/app/views/transactionDetails.dart';
@@ -94,11 +95,11 @@ class AppPages {
         page: () =>
             BankForm(), //Gerer(),  //CongratulationPage(token: "token"),
         middlewares: [AuthMiddleware()]),
-    GetPage(
-        name: _Paths.QR_PAGE,
-        page: () =>
-            QRScanPage(), //Gerer(),  //CongratulationPage(token: "token"),
-        middlewares: [AuthMiddleware()]),
+    // GetPage(
+    //     name: _Paths.QR_PAGE,
+    //     page: () =>
+    //         QRScanPage(), //Gerer(),  //CongratulationPage(token: "token"),
+    //     middlewares: [AuthMiddleware()]),
     GetPage(
         name: _Paths.ADD_MONEY,
         page: () =>
@@ -121,6 +122,10 @@ class AppPages {
     GetPage(
       name: _Paths.IDPAYMENT,
       page: () => FpayIdPaymentScreen(),
+    ),
+    GetPage(
+      name: _Paths.CONTACT,
+      page: () => ContactsPage(),
     ),
   ];
 }

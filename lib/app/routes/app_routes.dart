@@ -20,6 +20,7 @@ abstract class Routes {
   static const BOTTOMBAR = _Paths.BOTTOMBAR;
   static const ENTERAMOUNT = _Paths.ENTERAMOUNT;
   static const IDPAYMENT = _Paths.IDPAYMENT;
+  static const CONTACT = _Paths.CONTACT;
 }
 
 abstract class _Paths {
@@ -40,4 +41,5 @@ abstract class _Paths {
   static const BOTTOMBAR = "/bottombar";
   static const ENTERAMOUNT = "/enter_amount";
   static const IDPAYMENT = "/fpay_id_payment";
+  static const CONTACT = "/contact";
 }
