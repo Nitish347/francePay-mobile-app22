@@ -37,6 +37,7 @@ class PinPage extends StatefulWidget {
 class _PinPageState extends State<PinPage> {
   final transferController = Get.put(TransferController());
   String pin = "123456";
+  bool loading = false;
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
@@ -175,18 +176,35 @@ class _PinPageState extends State<PinPage> {
                     Get.back();
                     ShowBalance().showBalanace(context, height, width);
                   } else {
+                    setState(() {
+                      loading = true;
+                    });
                     var data = await transferController.TransferFund(
                         widget.amount, widget.id);
                     String to = data["data"]["destinationAccountNumber"];
                     String from = data["data"]["accountNumber"];
                     Get.off(() => CurrentTransaction(
-                        amount: widget.amount, from: from, to: to));
+                        credited: false,
+                        amount: widget.amount,
+                        from: from,
+                        to: to));
+                    setState(() {
+                      loading = false;
+                    });
                   }
                 } else {
                   showPinIncorrectAlert(context);
                 }
               },
             ),
+            SizedBox(
+              height: height * 0.1,
+            ),
+            Visibility(
+                visible: loading,
+                child: Center(
+                  child: CircularProgressIndicator(),
+                )),
             SizedBox(
               height: height * 0.2,
             ),

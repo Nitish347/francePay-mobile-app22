@@ -96,7 +96,9 @@ class _AddFriendsState extends State<AddFriends> {
                           var data = await NetWorkHandler.postData(
                               "getalldetails",
                               {"walletId": textEditingController.text});
-                          String nameData = data["data"][0]["merchant_name"];
+                          String nameData = data["data"][0]["firstname"] +
+                              data["data"][0]["lastname"];
+                          ;
                           print(nameData);
                           // print(data.toString());
                           setState(() {

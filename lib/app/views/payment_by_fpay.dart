@@ -16,6 +16,9 @@ class FpayIdPaymentScreen extends StatefulWidget {
 
 class _FpayIdPaymentScreenState extends State<FpayIdPaymentScreen> {
   bool idFound = false;
+  bool loading = false;
+  bool showErrId = false;
+  bool showErrAmount = false;
   TextEditingController textEditingController = TextEditingController();
   TextEditingController amount = TextEditingController();
   TextEditingController msg = TextEditingController();
@@ -119,16 +122,30 @@ class _FpayIdPaymentScreenState extends State<FpayIdPaymentScreen> {
                         // width: width * 0.1,
                         child: InkWell(
                           onTap: () async {
-                            var data = await NetWorkHandler.postData(
-                                "getalldetails",
-                                {"walletId": textEditingController.text});
-                            String nameData = data["data"][0]["merchant_name"];
-                            print(nameData);
-                            // print(data.toString());
-                            setState(() {
-                              idFound = true;
-                              name = nameData;
-                            });
+                            if (textEditingController.text == null ||
+                                textEditingController.text.isEmpty) {
+                              setState(() {
+                                showErrId = true;
+                              });
+                            } else {
+                              String nameData;
+                              var data = await NetWorkHandler.postData(
+                                  "getalldetails",
+                                  {"walletId": textEditingController.text});
+                              nameData = data["data"][0]["firstname"] +
+                                  data["data"][0]["lastname"];
+                              // if (nameData == null) {
+                              //   nameData = data["data"][0]["firstname"] +
+                              //       data["data"][0]["lastname"];
+                              // }
+                              print(nameData);
+                              // print(data.toString());
+                              setState(() {
+                                idFound = true;
+                                name = nameData;
+                                showErrId = false;
+                              });
+                            }
                           },
                           child: Text(
                             "Verify",
@@ -142,6 +159,17 @@ class _FpayIdPaymentScreenState extends State<FpayIdPaymentScreen> {
                       ),
                     ],
                   ),
+                ),
+              ),
+              Visibility(
+                visible: showErrId,
+                child: Text(
+                  "Enter valid Id",
+                  style: TextStyle(
+                      fontFamily: "sarabun",
+                      fontSize: height * 0.018,
+                      color: Colors.red,
+                      fontWeight: FontWeight.w500),
                 ),
               ),
               idFound
@@ -242,6 +270,17 @@ class _FpayIdPaymentScreenState extends State<FpayIdPaymentScreen> {
                   )),
                 ),
               ),
+              Visibility(
+                visible: showErrAmount,
+                child: Text(
+                  "Enter Amount",
+                  style: TextStyle(
+                      fontFamily: "sarabun",
+                      fontSize: height * 0.018,
+                      color: Colors.red,
+                      fontWeight: FontWeight.w500),
+                ),
+              ),
               SizedBox(
                 height: height * 0.02,
               ),
@@ -291,15 +330,27 @@ class _FpayIdPaymentScreenState extends State<FpayIdPaymentScreen> {
                     onPressed: () {
                       // print(amount);
                       // print(widget.id);
-                      Navigator.pushReplacement(
-                          context,
-                          CupertinoPageRoute(
-                              builder: (context) => PinPage(
-                                    balance: false,
-                                    amount: amount.text,
-                                    id: "158785285",
-                                    dynamic: false,
-                                  )));
+                      if (idFound &&
+                          amount.text != null &&
+                          amount.text.isNotEmpty) {
+                        Navigator.pushReplacement(
+                            context,
+                            CupertinoPageRoute(
+                                builder: (context) => PinPage(
+                                      balance: false,
+                                      amount: amount.text,
+                                      id: textEditingController.text,
+                                      dynamic: false,
+                                    )));
+                      } else if (!idFound) {
+                        setState(() {
+                          showErrId = true;
+                        });
+                      } else {
+                        setState(() {
+                          showErrAmount = true;
+                        });
+                      }
                     },
                     style: ButtonStyle(
                         backgroundColor:

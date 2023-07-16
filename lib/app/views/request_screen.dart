@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:francepay/app/controllers/account_controller.dart';
 import 'package:francepay/app/models/PendingRQSTModel.dart';
 import 'package:francepay/app/views/accept_request.dart';
+import 'package:francepay/pages/AcceptFriendRequest.dart';
 import 'package:francepay/widgets/flagAppBar.dart';
 import 'package:francepay/widgets/request_card_new.dart';
 import 'package:francepay/widgets/transaction_card.dart';
@@ -80,9 +81,7 @@ class _RequestScreenState extends State<RequestScreen> {
                             Center(
                               child: PendingRequests(height, width),
                             ),
-                            Center(
-                              child: Text("kjsvjjs"),
-                            ),
+                            PendingFriendRequests(height, width)
                           ],
                         ),
                       )
@@ -104,7 +103,7 @@ Widget PendingRequests(double height, double width) {
       Padding(
         padding: const EdgeInsets.all(8.0),
         child: Text(
-          "Pending Requests",
+          "Pending Payment Requests",
           style: GoogleFonts.poppins(
               fontWeight: FontWeight.w400, fontSize: height * 0.035),
         ),
@@ -128,6 +127,61 @@ Widget PendingRequests(double height, double width) {
                           ));
                     },
                     child: RequestCard(
+                        width,
+                        height,
+                        "Nitish Chaurasiya",
+                        "Pending",
+                        controller.pendingList[index].receiverId.toString(),
+                        "svgPath",
+                        Colors.red,
+                        controller.pendingList[index].amount.toString(),
+                        controller.pendingList[index].createdAt.toString()),
+                  ),
+                );
+              },
+            ),
+          ),
+        ),
+      ),
+      const SizedBox(
+        height: 10,
+      )
+    ],
+  );
+}
+
+Widget PendingFriendRequests(double height, double width) {
+  ObsData controller = Get.put(ObsData());
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Text(
+          "Pending Friend Requests",
+          style: GoogleFonts.poppins(
+              fontWeight: FontWeight.w400, fontSize: height * 0.035),
+        ),
+      ),
+      Expanded(
+        child: Container(
+          child: Obx(
+            () => ListView.builder(
+              itemCount: controller.pendingList.length,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 5, vertical: 0.5),
+                  child: InkWell(
+                    onTap: () {
+                      // AccountController().GetAllRequest();
+                      Get.to(() => AcceptRequestScreen(
+                            amount:
+                                controller.pendingList[index].amount.toString(),
+                            id: controller.pendingList[index].payerId
+                                .toString(),
+                          ));
+                    },
+                    child: FriendReqCard(
                         width,
                         height,
                         "Nitish Chaurasiya",

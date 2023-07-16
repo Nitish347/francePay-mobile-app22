@@ -11,7 +11,6 @@ import 'congratulationPage.dart';
 import 'package:quickalert/quickalert.dart';
 import 'package:get/get.dart';
 
-
 class IdForm extends StatefulWidget {
   String verify;
 
@@ -22,11 +21,10 @@ class IdForm extends StatefulWidget {
 }
 
 class _IdFormState extends State<IdForm> {
-
   final SigninController sigInController = Get.put(SigninController());
   bool isLoading = false;
 
-  paymentSuccess(data){
+  paymentSuccess(data) {
     QuickAlert.show(
       context: context,
       type: QuickAlertType.success,
@@ -34,16 +32,17 @@ class _IdFormState extends State<IdForm> {
     );
   }
 
-  paymentFailed(data){ QuickAlert.show(
-    context: context,
-    type: QuickAlertType.error,
-    title: 'Oops...',
-    text: data,
-  );
-
+  paymentFailed(data) {
+    QuickAlert.show(
+      context: context,
+      type: QuickAlertType.error,
+      title: 'Oops...',
+      text: data,
+    );
   }
 
-  postData(String firstName, String lastName, String dateOfBirth, String password) async{
+  postData(String firstName, String lastName, String dateOfBirth,
+      String password) async {
     var response = await http.post(
       Uri.parse('https://api.france-pay.fr/api/auth/register'),
       headers: <String, String>{
@@ -77,56 +76,72 @@ class _IdFormState extends State<IdForm> {
           children: [
             const FlagAppBar(),
             Container(
-              margin: EdgeInsets.only(left: width/4, right: width/4, top: height/20, bottom: height/20),
-              child: Image.asset("assets/images/logo-main.png"),),
+              child: Image.asset(
+                "assets/images/logo-main.png",
+                height: height * 0.05,
+              ),
+            ),
             Form(
               child: Column(
-
                 children: [
                   Container(
-                    margin: EdgeInsets.only(left: width/10, top: height/50),
+                    margin: EdgeInsets.only(left: width / 10, top: height / 50),
                     child: Row(
                       children: [
                         Image.asset("assets/images/nameOffice.png", scale: 30),
                         Container(
-                            margin: EdgeInsets.only(left: width/100),
-                            child: Text("Nom",
-                              style: TextStyle(color: Color(0XFF757F8C),
-                                  fontWeight: FontWeight.w500, fontSize: 12),))
+                            margin: EdgeInsets.only(left: width / 100),
+                            child: Text(
+                              "Nom",
+                              style: TextStyle(
+                                  color: Color(0XFF757F8C),
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 12),
+                            ))
                       ],
                     ),
                   ),
                   Container(
-                    margin: EdgeInsets.only(left: width/10, right: width/10, bottom: height/20),
-                  child: TextFormField(
-                    controller: lastNameController,
-                    decoration: InputDecoration(
-                      hintText: 'Nom',
+                      margin: EdgeInsets.only(
+                          left: width / 10,
+                          right: width / 10,
+                          bottom: height / 20),
+                      child: TextFormField(
+                        controller: lastNameController,
+                        decoration: InputDecoration(
+                          hintText: 'Nom',
 
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      filled: true, //<-- SEE HERE
-                      fillColor: Color.fromRGBO(207, 203, 185, 0.6), //<-- SEE HERE
-                    ),
-                  )
-                ),
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide.none,
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          filled: true, //<-- SEE HERE
+                          fillColor:
+                              Color.fromRGBO(207, 203, 185, 0.6), //<-- SEE HERE
+                        ),
+                      )),
                   Container(
-                    margin: EdgeInsets.only(left: width/10),
+                    margin: EdgeInsets.only(left: width / 10),
                     child: Row(
                       children: [
                         Image.asset("assets/images/nameOffice.png", scale: 30),
                         Container(
-                            margin: EdgeInsets.only(left: width/100),
-                            child: Text("Prénoms",
-                              style: TextStyle(color: Color(0XFF757F8C),
-                                  fontWeight: FontWeight.w500, fontSize: 12),))
+                            margin: EdgeInsets.only(left: width / 100),
+                            child: Text(
+                              "Prénoms",
+                              style: TextStyle(
+                                  color: Color(0XFF757F8C),
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 12),
+                            ))
                       ],
                     ),
                   ),
                   Container(
-                      margin: EdgeInsets.only(left: width/10, right: width/10, bottom: height/20),
+                      margin: EdgeInsets.only(
+                          left: width / 10,
+                          right: width / 10,
+                          bottom: height / 20),
                       child: TextFormField(
                         controller: firstNameController,
                         decoration: InputDecoration(
@@ -137,25 +152,32 @@ class _IdFormState extends State<IdForm> {
                             borderRadius: BorderRadius.circular(10.0),
                           ),
                           filled: true, //<-- SEE HERE
-                          fillColor: Color.fromRGBO(207, 203, 185, 0.6), //<-- SEE HERE
+                          fillColor:
+                              Color.fromRGBO(207, 203, 185, 0.6), //<-- SEE HERE
                         ),
-                      )
-                  ),
+                      )),
                   Container(
-                    margin: EdgeInsets.only(left: width/10),
+                    margin: EdgeInsets.only(left: width / 10),
                     child: Row(
                       children: [
                         Image.asset("assets/images/calendar.png", scale: 30),
                         Container(
-                            margin: EdgeInsets.only(left: width/100),
-                            child: Text("Date de naissance",
-                              style: TextStyle(color: Color(0XFF757F8C),
-                                  fontWeight: FontWeight.w500, fontSize: 12),))
+                            margin: EdgeInsets.only(left: width / 100),
+                            child: Text(
+                              "Date de naissance",
+                              style: TextStyle(
+                                  color: Color(0XFF757F8C),
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 12),
+                            ))
                       ],
                     ),
                   ),
                   Container(
-                      margin: EdgeInsets.only(left: width/10, right: width/10, bottom: height/20),
+                      margin: EdgeInsets.only(
+                          left: width / 10,
+                          right: width / 10,
+                          bottom: height / 20),
                       child: TextFormField(
                         controller: dateController,
                         decoration: InputDecoration(
@@ -166,25 +188,33 @@ class _IdFormState extends State<IdForm> {
                             borderRadius: BorderRadius.circular(10.0),
                           ),
                           filled: true, //<-- SEE HERE
-                          fillColor: Color.fromRGBO(207, 203, 185, 0.6), //<-- SEE HERE
+                          fillColor:
+                              Color.fromRGBO(207, 203, 185, 0.6), //<-- SEE HERE
                         ),
-                      )
-                  ),
+                      )),
                   Container(
-                    margin: EdgeInsets.only(left: width/10),
+                    margin: EdgeInsets.only(left: width / 10),
                     child: Row(
                       children: [
-                        Image.asset("assets/images/passwordIcon.png", scale: 30),
+                        Image.asset("assets/images/passwordIcon.png",
+                            scale: 30),
                         Container(
-                            margin: EdgeInsets.only(left: width/100),
-                            child: Text("Mot de passe",
-                              style: TextStyle(color: Color(0XFF757F8C),
-                                  fontWeight: FontWeight.w500, fontSize: 12),))
+                            margin: EdgeInsets.only(left: width / 100),
+                            child: Text(
+                              "Mot de passe",
+                              style: TextStyle(
+                                  color: Color(0XFF757F8C),
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 12),
+                            ))
                       ],
                     ),
                   ),
                   Container(
-                      margin: EdgeInsets.only(left: width/10, right: width/10, bottom: height/20),
+                      margin: EdgeInsets.only(
+                          left: width / 10,
+                          right: width / 10,
+                          bottom: height / 20),
                       child: TextFormField(
                         controller: pwController,
                         decoration: InputDecoration(
@@ -195,25 +225,31 @@ class _IdFormState extends State<IdForm> {
                             borderRadius: BorderRadius.circular(10.0),
                           ),
                           filled: true, //<-- SEE HERE
-                          fillColor: Color.fromRGBO(207, 203, 185, 0.6), //<-- SEE HERE
+                          fillColor:
+                              Color.fromRGBO(207, 203, 185, 0.6), //<-- SEE HERE
                         ),
-                      )
-                  ),
+                      )),
                   Container(
-                    margin: EdgeInsets.only(left: width/10),
+                    margin: EdgeInsets.only(left: width / 10),
                     child: Row(
                       children: [
-                        Image.asset("assets/images/passwordIcon.png", scale: 30),
+                        Image.asset("assets/images/passwordIcon.png",
+                            scale: 30),
                         Container(
-                            margin: EdgeInsets.only(left: width/100),
-                            child: Text("Mot de passe",
-                              style: TextStyle(color: Color(0XFF757F8C),
-                                  fontWeight: FontWeight.w500, fontSize: 12),))
+                            margin: EdgeInsets.only(left: width / 100),
+                            child: Text(
+                              "Mot de passe",
+                              style: TextStyle(
+                                  color: Color(0XFF757F8C),
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 12),
+                            ))
                       ],
                     ),
                   ),
                   Container(
-                      margin: EdgeInsets.only(left: width/10, right: width/10),
+                      margin:
+                          EdgeInsets.only(left: width / 10, right: width / 10),
                       child: TextFormField(
                         controller: confirmPwController,
                         decoration: InputDecoration(
@@ -224,60 +260,62 @@ class _IdFormState extends State<IdForm> {
                             borderRadius: BorderRadius.circular(10.0),
                           ),
                           filled: true, //<-- SEE HERE
-                          fillColor: Color.fromRGBO(207, 203, 185, 0.6), //<-- SEE HERE
+                          fillColor:
+                              Color.fromRGBO(207, 203, 185, 0.6), //<-- SEE HERE
                         ),
-                      )
-                  )
+                      ))
                 ],
               ),
             ),
             Container(
-                margin: EdgeInsets.only(top: height/20, bottom: height/20),
-                width: width/1.5,
-                child: ElevatedButton(onPressed: () async{
+                margin: EdgeInsets.only(top: height / 20, bottom: height / 20),
+                width: width / 1.5,
+                child: ElevatedButton(
+                  onPressed: () async {
+                    if (firstNameController.text == null ||
+                        firstNameController.text.isEmpty) {
+                      paymentFailed("Espace nom incomplet");
+                    } else if (lastNameController.text == null ||
+                        lastNameController.text.isEmpty) {
+                      paymentFailed("Espace prénom incomplet");
+                    } else if (dateController.text == null ||
+                        dateController.text.isEmpty) {
+                      paymentFailed("Date incorrect");
+                    } else if (pwController.text == null ||
+                        pwController.text.isEmpty) {
+                      paymentFailed("Mot de passe invalide");
+                    } else if (confirmPwController.text == null ||
+                        confirmPwController.text.isEmpty) {
+                      paymentFailed("Confirmation de mot de passe incorrect");
+                    } else {
+                      setState(() {
+                        isLoading = true;
+                      });
 
-                  if (firstNameController.text == null ||  firstNameController.text.isEmpty) {
-                    paymentFailed("Espace nom incomplet");
-                  }
-                  else if (lastNameController .text == null || lastNameController.text.isEmpty) {
-                    paymentFailed("Espace prénom incomplet");
-                  }
-                  else if (dateController.text == null || dateController.text.isEmpty) {
-                    paymentFailed("Date incorrect");
-                  }
-                  else if ( pwController.text == null || pwController.text.isEmpty) {
-                    paymentFailed("Mot de passe invalide");
-                  }
-                  else if ( confirmPwController.text == null || confirmPwController.text.isEmpty) {
-                    paymentFailed("Confirmation de mot de passe incorrect");
-                  }
+                      var data = await sigInController.RegisterUser(
+                          firstNameController.text,
+                          lastNameController.text,
+                          pwController.text,
+                          "123",
+                          widget.verify);
 
-                  else {
-                    setState(() {
-                      isLoading = true;
-                    });
+                      print("-----------$data");
 
-
-                    var data = await sigInController.RegisterUser(firstNameController.text, lastNameController.text, dateController.text, pwController.text,widget.verify);
-
-                    if (data['status'] == true) {
+                      // if (data['wallet_id'] != null &&
+                      //     data['wallet_id'] != "") {
                       paymentSuccess(data['msg']);
                       Get.toNamed("/home");
                       print(data);
-                    }
-
-                    else if (data['status'] == false) {
-                      paymentFailed(data['msg']);
-                    }
-                    else {
-                      paymentFailed(data['msg']);
+                      // } else if (data['status'] == false) {
+                      //   paymentFailed(data['msg']);
+                      // } else {
+                      //   paymentFailed(data['msg']);
                     }
 
                     setState(() {
                       isLoading = false;
                     });
-                  }
-
+                  },
 
                   /*var response = await postData(firstNameController.text,
                   lastNameController.text,
@@ -289,20 +327,16 @@ class _IdFormState extends State<IdForm> {
                 context,
                 MaterialPageRoute(builder: (context) => CongratulationPages(token: "",)),
               );*/
-                },
+                  // },
                   style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Color(0XFF1d3364)),
+                      backgroundColor:
+                          MaterialStateProperty.all(Color(0XFF1d3364)),
                       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                           RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0),
-
-                          )
-                      )
-                  ),
+                        borderRadius: BorderRadius.circular(22.0),
+                      ))),
                   child: Text("CONTINUER"),
-
-                )
-            ),
+                )),
           ],
         ),
       ),

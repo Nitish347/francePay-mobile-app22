@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'dart:ui';
 import 'package:flutter/rendering.dart';
+import 'package:francepay/EnterAmount.dart';
 import 'package:francepay/app/controllers/account_controller.dart';
 import 'package:francepay/app/views/common/bottomnavbar.dart';
 import 'package:francepay/pages/qrScanPage.dart';
@@ -82,9 +83,10 @@ class ProfilState extends State<Profil> {
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               CircleAvatar(
-                                  radius: height * 0.06,
-                                  backgroundImage: AssetImage(
-                                      'assets/images/photoIdentite.jpg')),
+                                radius: height * 0.06,
+                                backgroundImage: NetworkImage(
+                                    "https://thumbs.dreamstime.com/b/default-avatar-profile-icon-vector-unknown-social-media-user-photo-default-avatar-profile-icon-vector-unknown-social-media-user-184816085.jpg"),
+                              ),
                               SizedBox(
                                 width: width * 0.1,
                               ),
@@ -232,7 +234,13 @@ class ProfilState extends State<Profil> {
                             height: height * 0.05,
                             child: ElevatedButton(
                               onPressed: () async {
-                                //await Share.share("Hello 787314480@FPAY is my France pay ID");
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => EnterAmount(
+                                            id: accountController
+                                                .user_data['wallet_id'],
+                                            generate: true)));
                               },
                               style: ButtonStyle(
                                   backgroundColor: MaterialStateProperty.all(

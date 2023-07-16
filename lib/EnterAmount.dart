@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:francepay/app/views/GenerateDynamicQr.dart';
 import 'package:francepay/pages/PinPage.dart';
 
 import 'package:francepay/widgets/CheckBalance.dart';
@@ -10,15 +11,16 @@ import 'package:francepay/widgets/logo.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class EnterAmount extends StatefulWidget {
+  bool generate;
   String id;
-  EnterAmount({required this.id});
+  EnterAmount({required this.id, required this.generate});
   @override
   State<EnterAmount> createState() => _EnterAmountState();
 }
 
 class _EnterAmountState extends State<EnterAmount> {
   String amount = "";
-
+  bool showErr = false;
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
@@ -31,21 +33,37 @@ class _EnterAmountState extends State<EnterAmount> {
             padding: EdgeInsets.all(10.0),
             child: Column(children: [
               Logo(height * 0.7),
-              Padding(
-                padding: EdgeInsets.all(height * 0.01),
-                child: CircleAvatar(
-                    radius: height * 0.05,
-                    backgroundImage:
-                        AssetImage('assets/images/photoIdentite.jpg')),
+              Visibility(
+                visible: !widget.generate,
+                child: Padding(
+                  padding: EdgeInsets.all(height * 0.01),
+                  child: CircleAvatar(
+                      radius: height * 0.05,
+                      backgroundImage:
+                          AssetImage('assets/images/photoIdentite.jpg')),
+                ),
               ),
-              Text(
-                "Null",
-                style: GoogleFonts.poppins(fontSize: height * 0.03),
+              Visibility(
+                visible: !widget.generate,
+                child: Text(
+                  "Null",
+                  style: GoogleFonts.poppins(fontSize: height * 0.03),
+                ),
               ),
-              Text(
-                "To: ${widget.id}@fpay",
-                style: GoogleFonts.poppins(
-                    fontSize: height * 0.02, color: Colors.black45),
+              Visibility(
+                visible: widget.generate,
+                child: Text(
+                  "Generate Dynamic QR Code",
+                  style: GoogleFonts.poppins(fontSize: height * 0.03),
+                ),
+              ),
+              Visibility(
+                visible: !widget.generate,
+                child: Text(
+                  "To: ${widget.id}@fpay",
+                  style: GoogleFonts.poppins(
+                      fontSize: height * 0.02, color: Colors.black45),
+                ),
               ),
               Padding(
                 padding: EdgeInsets.all(5.0),
@@ -143,6 +161,17 @@ class _EnterAmountState extends State<EnterAmount> {
                   )),
                 ),
               ),
+              Visibility(
+                visible: showErr,
+                child: Text(
+                  "Enter Amount*",
+                  style: TextStyle(
+                      fontFamily: "sarabun",
+                      fontSize: height * 0.015,
+                      color: Colors.red,
+                      fontWeight: FontWeight.w500),
+                ),
+              ),
               SizedBox(
                 height: height * 0.02,
               ),
@@ -188,17 +217,27 @@ class _EnterAmountState extends State<EnterAmount> {
                   width: width * 0.75,
                   child: ElevatedButton(
                     onPressed: () {
-                      print(amount);
-                      print(widget.id);
-                      Navigator.pushReplacement(
-                          context,
-                          CupertinoPageRoute(
-                              builder: (context) => PinPage(
-                                    balance: false,
-                                    amount: amount,
-                                    id: widget.id,
-                                    dynamic: false,
-                                  )));
+                      if (amount == "") {
+                        setState(() {
+                          showErr = true;
+                        });
+                      } else if (widget.generate) {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => DynamicQrCode(
+                                    amount: amount, id: widget.id)));
+                      } else {
+                        Navigator.pushReplacement(
+                            context,
+                            CupertinoPageRoute(
+                                builder: (context) => PinPage(
+                                      balance: false,
+                                      amount: amount,
+                                      id: widget.id,
+                                      dynamic: false,
+                                    )));
+                      }
                     },
                     style: ButtonStyle(
                         backgroundColor:
@@ -210,7 +249,7 @@ class _EnterAmountState extends State<EnterAmount> {
                         ))),
                     child: Center(
                         child: Text(
-                      "Pay",
+                      widget.generate ? "Generate" : "Pay",
                       style: GoogleFonts.poppins(
                           color: Colors.white, fontSize: 18),
                     )),

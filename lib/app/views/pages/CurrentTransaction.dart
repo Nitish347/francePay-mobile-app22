@@ -12,8 +12,12 @@ class CurrentTransaction extends StatefulWidget {
   String amount;
   String? to;
   String? from;
+  bool credited;
   CurrentTransaction(
-      {required this.amount, required this.to, required this.from});
+      {required this.amount,
+      required this.to,
+      required this.from,
+      required this.credited});
 
   @override
   State<CurrentTransaction> createState() => _CurrentTransactionState();
@@ -61,7 +65,9 @@ class _CurrentTransactionState extends State<CurrentTransaction> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "Paid Successfully",
+                          widget.credited
+                              ? "Received Successfully"
+                              : "Paid Successfully",
                           style: GoogleFonts.sarabun(
                               color: Colors.white,
                               fontSize: height * 0.03,

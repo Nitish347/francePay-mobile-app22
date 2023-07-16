@@ -14,14 +14,14 @@ import 'package:francepay/widgets/nextButton.dart';
 import 'package:francepay/pages/idForm.dart';
 import 'package:quickalert/quickalert.dart';
 
-class PhoneNumber extends StatefulWidget {
-  const PhoneNumber({Key? key}) : super(key: key);
+class OldPhoneNumber extends StatefulWidget {
+  const OldPhoneNumber({Key? key}) : super(key: key);
 
   @override
-  PhoneNumberState createState() => PhoneNumberState();
+  OldPhoneNumberState createState() => OldPhoneNumberState();
 }
 
-class PhoneNumberState extends State<PhoneNumber> {
+class OldPhoneNumberState extends State<OldPhoneNumber> {
   TextEditingController phoneController = TextEditingController();
   final SigninController sigInController = Get.put(SigninController());
 

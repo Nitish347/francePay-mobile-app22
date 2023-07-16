@@ -132,7 +132,7 @@ class ConfirmationCodeState extends State<ConfirmationCode> {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => MailForm(
+                                          builder: (context) => NewMailForm(
                                               validationKey: data["token"],
                                               verify: data["token"])));
                                 } else if (data['status'] == false) {

@@ -11,14 +11,14 @@ import '../widgets/logo.dart';
 import '../widgets/nextButton.dart';
 import 'idForm.dart';
 
-class PhoneNumber extends StatefulWidget {
-  const PhoneNumber({Key? key}) : super(key: key);
+class NewPhoneNumber extends StatefulWidget {
+  const NewPhoneNumber({Key? key}) : super(key: key);
 
   @override
-  PhoneNumberState createState() => PhoneNumberState();
+  NewPhoneNumberState createState() => NewPhoneNumberState();
 }
 
-class PhoneNumberState extends State<PhoneNumber> {
+class NewPhoneNumberState extends State<NewPhoneNumber> {
   bool showError = false;
 
   postData(String number) async {
@@ -108,18 +108,23 @@ class PhoneNumberState extends State<PhoneNumber> {
                               onPressed: () async {
                                 //if (exp.hasMatch(phoneController.text)) {
 
-                                response = await postData(phoneController.text);
-                                Map<String, dynamic> data =
-                                    json.decode(response);
-                                print(phoneController.text);
-                                print(data["Details"]);
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => ConfirmationCode(
-                                              number: phoneController.text,
-                                              identification: data["Details"],
-                                            )));
+                                if (phoneController.text != null &&
+                                    phoneController.text.isNotEmpty) {
+                                  response =
+                                      await postData(phoneController.text);
+                                  Map<String, dynamic> data =
+                                      json.decode(response);
+                                  print(phoneController.text);
+                                  print(data["Details"]);
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              NewConfirmationCode(
+                                                number: phoneController.text,
+                                                identification: data["Details"],
+                                              )));
+                                }
                                 //}else{
                                 //setState(() {
                                 //showError = true;

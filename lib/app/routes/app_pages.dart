@@ -14,6 +14,7 @@ import 'package:francepay/pages/newPayment.dart';
 import 'package:francepay/app/views/signup/phoneNumber.dart';
 import 'package:francepay/app/views/payment_by_fpay.dart';
 import 'package:francepay/pages/payments.dart';
+import 'package:francepay/pages/phoneNumber.dart';
 import 'package:francepay/pages/test.dart';
 import 'package:francepay/app/views/transactionDetails.dart';
 import 'package:get/get.dart';
@@ -33,6 +34,7 @@ import 'package:francepay/app/views/add_money.dart';
 
 import 'package:francepay/app/views/payment_service/add_money_page.dart';
 
+import '../../SCANNER.dart';
 import '../../widgets/bottomBar.dart';
 
 part 'app_routes.dart';
@@ -78,7 +80,7 @@ class AppPages {
         middlewares: [AuthMiddleware()]),
     GetPage(
         name: _Paths.SIGNUP,
-        page: () => PhoneNumber(),
+        page: () => NewPhoneNumber(),
         middlewares: [FirstMiddleware()]),
     GetPage(
       name: _Paths.TEST,

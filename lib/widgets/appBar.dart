@@ -3,7 +3,7 @@ import 'package:francepay/app/views/request_screen.dart';
 
 import '../Constants/Constants.dart';
 
-AppBar FpayAppBar(double height, BuildContext context) {
+AppBar FpayAppBar(double height, BuildContext context, bool noti) {
   return AppBar(
       iconTheme: IconThemeData(color: blueColor),
       centerTitle: true,
@@ -17,7 +17,7 @@ AppBar FpayAppBar(double height, BuildContext context) {
           onPressed: () {},
         ), //IconButton
 
-        Center(child: bellIcon(true, context))
+        Center(child: bellIcon(noti, context))
       ],
       backgroundColor: Colors.white);
 }

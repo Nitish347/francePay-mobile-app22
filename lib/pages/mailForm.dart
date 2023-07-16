@@ -1,5 +1,3 @@
-
-
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
@@ -8,25 +6,21 @@ import 'package:http/http.dart' as http;
 import '../widgets/flagAppBar.dart';
 import 'confirmationMail.dart';
 
-class MailForm extends StatefulWidget {
+class NewMailForm extends StatefulWidget {
   String validationKey;
   String verify;
 
-  MailForm({Key? key, required this.validationKey, required this.verify}) : super(key: key);
+  NewMailForm({Key? key, required this.validationKey, required this.verify})
+      : super(key: key);
 
   @override
-  MailFormState createState() => MailFormState();
+  NewMailFormState createState() => NewMailFormState();
 }
 
-
-
-
-
-class MailFormState extends State<MailForm> {
-
+class NewMailFormState extends State<NewMailForm> {
   bool showError = false;
 
-  postData(String email) async{
+  postData(String email) async {
     var response = await http.post(
       Uri.parse('https://api.france-pay.fr/api/email/otp'),
       headers: <String, String>{
@@ -42,11 +36,8 @@ class MailFormState extends State<MailForm> {
     return response.body;
   }
 
-
   @override
   Widget build(BuildContext context) {
-
-
     TextEditingController phoneController = TextEditingController();
     Map<String, String> phoneNumber;
     String pattern = r'^(?:[+0]9)?[0-9]{10}$';
@@ -61,82 +52,105 @@ class MailFormState extends State<MailForm> {
       body: SingleChildScrollView(
         child: SafeArea(
           child: Column(
-            //mainAxisSize: MainAxisSize.max,
+              //mainAxisSize: MainAxisSize.max,
               children: [
                 const FlagAppBar(),
                 Container(
-                  margin: EdgeInsets.only(left: width/4, right: width/4, top: height/10, bottom: height/10),
-                  child: Image.asset("assets/images/logo-main.png"),),
+                  margin: EdgeInsets.only(
+                      left: width / 4,
+                      right: width / 4,
+                      top: height / 10,
+                      bottom: height / 10),
+                  child: Image.asset("assets/images/logo-main.png"),
+                ),
                 Container(
-                  margin: EdgeInsets.only(left: width/6, right: width/6, bottom: 0),
-                  child: Text("VEUILLEZ ENTRER VOTRE ADRESSE MAIL POUR RÉALISER VOTRE INSCRIPTION", textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  margin: EdgeInsets.only(
+                      left: width / 10, right: width / 10, bottom: 0),
+                  child: Text(
+                      "VEUILLEZ ENTRER VOTRE ADRESSE MAIL POUR RÉALISER VOTRE INSCRIPTION",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: Color(0XFF1d3364),
+                          fontSize: height * 0.022,
+                          fontWeight: FontWeight.w500)),
+                ),
+                SizedBox(
+                  height: height * 0.05,
+                ),
+                Container(
+                  child: Image.asset(
+                    "assets/images/mailVerification.gif",
+                    height: height * 0.2,
                   ),
                 ),
-                Container(
-                  margin: EdgeInsets.only(left: width/6, right: width/6, bottom: 0, top: height/20),
-                  child: Image.asset("assets/images/mailVerification.gif"),
+                SizedBox(
+                  height: height * 0.05,
                 ),
                 Container(
-                    margin: EdgeInsets.only(top: height/15),
-                    width: 3*width/4,
+                    height: height * 0.06,
+                    width: 3 * width / 4,
                     child: TextField(
                       controller: phoneController,
-                      scrollPadding:  EdgeInsets.only(bottom:40),
+                      scrollPadding: EdgeInsets.only(bottom: 40),
                       decoration: InputDecoration(
                         hintText: 'Adresse mail',
                         suffixIcon: Container(
+                          width: width * 0.18,
                           decoration: BoxDecoration(
                               color: Color(0XFF1d3364),
-                              borderRadius: BorderRadius.circular(10)
-                          ),
-                          height: height/13,
-
+                              borderRadius: BorderRadius.circular(10)),
+                          height: height / 13,
                           child: IconButton(
-
                               color: Colors.white,
-                              icon: Icon(Icons.send),
-
+                              icon: Icon(
+                                Icons.send,
+                                size: height * 0.03,
+                              ),
                               onPressed: () async {
-                                if (true) {
-
-                                response = await postData(phoneController.text);
-                                Map<String, dynamic> data = json.decode(response);
-                                print(phoneController.text);
-                                print(data["Details"]);
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => ConfirmationMail( number: phoneController.text, identification: data["Details"], verify: widget.validationKey)));
-                                }else{
-                                setState(() {
-                                showError = true;
-                                });
+                                if (phoneController.text != null &&
+                                    phoneController.text.isNotEmpty) {
+                                  response =
+                                      await postData(phoneController.text);
+                                  Map<String, dynamic> data =
+                                      json.decode(response);
+                                  print(phoneController.text);
+                                  print(data["Details"]);
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              ConfirmationMail(
+                                                  number: phoneController.text,
+                                                  identification:
+                                                      data["Details"],
+                                                  verify:
+                                                      widget.validationKey)));
+                                } else {
+                                  setState(() {
+                                    showError = true;
+                                  });
                                 }
-                              }
-                          ),
+                              }),
                         ),
                         border: OutlineInputBorder(
                           borderSide: BorderSide.none,
                           borderRadius: BorderRadius.circular(10.0),
                         ),
                         filled: true, //<-- SEE HERE
-                        fillColor: Color.fromRGBO(207, 203, 185, 0.6), //<-- SEE HERE
+                        fillColor:
+                            Color.fromRGBO(207, 203, 185, 0.6), //<-- SEE HERE
                       ),
-                    )
-
-                ),
+                    )),
                 Container(
-                  child: Text("Vous devez saisir un numéro de téléphone valide", style: TextStyle(color: showError ? Colors.red : Colors.transparent),),
+                  child: Text(
+                    "Vous devez saisir un numéro de téléphone valide",
+                    style: TextStyle(
+                        color: showError ? Colors.red : Colors.transparent),
+                  ),
                 )
-              ]
-          ),
+              ]),
         ),
       ),
     );
   }
 }
-
-
-
-

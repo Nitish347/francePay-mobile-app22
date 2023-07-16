@@ -222,6 +222,7 @@ Widget FriendGrid(String name) {
     child: ListTile(
       leading: CircleAvatar(
         radius: 30,
+        backgroundColor: blueColor,
         child: Icon(Icons.person),
       ),
       title: Text(

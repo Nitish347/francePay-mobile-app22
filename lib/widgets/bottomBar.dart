@@ -3,10 +3,14 @@ import 'package:flutter/material.dart';
 
 import 'package:francepay/pages/mainMenu.dart';
 import 'package:francepay/pages/profil.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
 import 'package:stylish_bottom_bar/model/bar_items.dart';
 import 'package:stylish_bottom_bar/stylish_bottom_bar.dart';
 
+import '../app/controllers/account_controller.dart';
+import '../app/obsData.dart';
 import '../app/scanner.dart';
 import '../app/views/account_home.dart';
 import '../app/views/pages/Transactions.dart';
@@ -29,6 +33,11 @@ class _AnimatedBarExampleState extends State<AnimatedBarExample> {
   dynamic selected;
   var heart = false;
   PageController controller = PageController();
+  void initState() {
+    // TODO: implement initState
+    AccountController().GetAllRequest();
+    setState(() {});
+  }
 
   @override
   void dispose() {
@@ -36,13 +45,16 @@ class _AnimatedBarExampleState extends State<AnimatedBarExample> {
     super.dispose();
   }
 
+  ObsData cntrl = Get.put(ObsData());
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     var height = MediaQuery.of(context).size.height;
+
     return Scaffold(
       drawer: NavigationDrawerWidget(),
-      appBar: FpayAppBar(height, context),
+      appBar: FpayAppBar(
+          height, context, cntrl.pendingList.length > 0 ? true : false),
       extendBody: true,
       bottomNavigationBar: StylishBottomBar(
         items: [

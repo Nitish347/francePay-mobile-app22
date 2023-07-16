@@ -56,7 +56,10 @@ class QRScanner {
                   )));
     } else {
       print("no");
-      Get.to(() => EnterAmount(id: input));
+      Get.to(() => EnterAmount(
+            id: input,
+            generate: false,
+          ));
       // Navigator.push(
       //     context, CupertinoPageRoute(builder: (context) => EnterAmount(id: input,)));
     }

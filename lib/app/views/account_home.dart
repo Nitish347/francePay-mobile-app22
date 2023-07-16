@@ -15,9 +15,11 @@ import 'package:francepay/pages/createTransaction.dart';
 import 'package:francepay/pages/gerer.dart';
 import 'package:francepay/app/controllers/account_controller.dart';
 import 'package:francepay/app/views/common/bottomnavbar.dart';
+import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 
 import '../../widgets/appBar.dart';
+import '../service/network_handler/networkhandler.dart';
 
 class MainMenu extends StatefulWidget {
   const MainMenu({Key? key}) : super(key: key);
@@ -28,10 +30,55 @@ class MainMenu extends StatefulWidget {
 
 class MainMenuState extends State<MainMenu> {
   final accountController = Get.put(AccountController());
+  final transferController = Get.put(TrackingScrollController());
+  List<String> Name = [];
+  // List<String> negName = [];
+  bool loading = false;
+
+  getName() async {
+    String walletId = "";
+    String userName = "";
+    setState(() {
+      loading = true;
+    });
+    var dt = await accountController.FetchTran();
+    int n = dt.length;
+    for (int i = 0; i < n; i++) {
+      var amount = dt[i]['amount'];
+      try {
+        if (amount < 0) {
+          walletId = dt[i]['destinationAccountNumber'].toString();
+          var data = await NetWorkHandler.postData(
+              "getalldetails", {"walletId": walletId});
+          userName =
+              data["data"][0]["firstname"] + " " + data["data"][0]["lastname"];
+        } else {
+          var ref = dt[i]['reference'].split("transfer_from_account:");
+          String name = ref[1];
+          var data = await NetWorkHandler.postData(
+              "getalldetails", {"walletId": walletId});
+          userName =
+              data["data"][0]["firstname"] + " " + data["data"][0]["lastname"];
+        }
+        Name.add(userName);
+      } catch (e) {
+        Name.add("user not found");
+      }
+
+      print(userName);
+      // Name.add(userName);
+    }
+    print(Name);
+    setState(() {
+      loading = false;
+    });
+  }
+
   @override
   void initState() {
     // TODO: implement initState
-    AccountController().GetAllRequest();
+    getName();
+    super.initState();
   }
 
   @override
@@ -293,112 +340,136 @@ class MainMenuState extends State<MainMenu> {
               //   ),
               // ),
 
-              Container(
-                height: height / 2.65,
-                width: width / 1.1,
-                // color: Colors.blue,
-                child: FutureBuilder<dynamic>(
-                  future: accountController.FetchTran(),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      return ListView.builder(
-                          itemCount: snapshot.data.length,
-                          //if no data
-                          itemBuilder: (context, index) {
-                            //convert date time format
-                            var date = DateTime.parse(
-                                snapshot.data[index]['createdAt'].toString());
+              !loading
+                  ? Container(
+                      height: height / 2.65,
+                      width: width / 1.1,
+                      // color: Colors.blue,
+                      child: FutureBuilder<dynamic>(
+                        future: accountController.FetchTran(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            return ListView.builder(
+                                itemCount: snapshot.data.length,
+                                //if no data
+                                itemBuilder: (context, index) {
+                                  // print(snapshot.data[0]);
+                                  //convert date time format
+                                  var date = DateTime.parse(snapshot.data[index]
+                                          ['createdAt']
+                                      .toString());
 
-                            var formatedDate =
-                                DateFormat('dd-MM-yyyy hh:mm').format(date);
-                            String name = snapshot.data[index]
-                                    ['destinationAccountNumber']
-                                .toString();
-                            String amount =
-                                snapshot.data[index]['amount'].toString();
+                                  var formatedDate =
+                                      DateFormat('dd-MM-yyyy hh:mm')
+                                          .format(date);
+                                  String name = snapshot.data[index]
+                                          ['destinationAccountNumber']
+                                      .toString();
+                                  String amount =
+                                      snapshot.data[index]['amount'].toString();
 
-                            if (snapshot.data[index]['amount'] < 0) {
-                              return TransactionsCard(height, width, false,
-                                  name, formatedDate, amount, context, false);
-                            } else if (snapshot.data[index]['amount'] > 0) {
-                              var refence = null;
+                                  if (snapshot.data[index]['amount'] < 0) {
+                                    return TransactionsCard(
+                                        height,
+                                        width,
+                                        false,
+                                        Name[index],
+                                        formatedDate,
+                                        amount,
+                                        context,
+                                        false);
+                                  } else if (snapshot.data[index]['amount'] >
+                                      0) {
+                                    var refence = null;
 
-                              //if array split exist
-                              if (snapshot.data[index]['reference']
-                                      .split("transfer_from_account:")
-                                      .length >
-                                  1) {
-                                var ref = snapshot.data[index]['reference']
-                                    .split("transfer_from_account:");
-                                refence = ref[1] + "@fpay";
-                              } else {
-                                refence = "Deposide from bank";
-                              }
+                                    //if array split exist
+                                    if (snapshot.data[index]['reference']
+                                            .split("transfer_from_account:")
+                                            .length >
+                                        1) {
+                                      var ref = snapshot.data[index]
+                                              ['reference']
+                                          .split("transfer_from_account:");
+                                      refence = ref[1];
+                                      // getName(refence)
+                                    } else {
+                                      refence = "Deposide from bank";
+                                    }
 
-                              print(refence);
+                                    print(refence);
 
-                              return Card(
-                                //green
-                                color: Color(0xFF118C4F),
-                                child: Container(
-                                    child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Container(
-                                      margin:
-                                          EdgeInsets.only(left: width / 100),
-                                      child: CircleAvatar(
-                                        backgroundImage: AssetImage(
-                                            "assets/images/photoIdentite.jpg"),
-                                        radius: 20,
-                                      ),
-                                    ),
-                                    Container(
-                                      margin: EdgeInsets.only(
-                                          left: width / 50, top: height / 70),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            refence,
-                                            style:
-                                                TextStyle(color: Colors.white),
-                                          ),
-                                          Container(
-                                              //margin: EdgeInsets.only(left: width/27),
-                                              child: Text(formatedDate,
-                                                  style: TextStyle(
-                                                      color: Colors.white))),
-                                        ],
-                                      ),
-                                    ),
-                                    Container(
-                                        margin:
-                                            EdgeInsets.only(left: width / 2.5),
-                                        child: Text(
-                                            snapshot.data[index]['amount']
-                                                    .toString() +
-                                                "€",
-                                            style: TextStyle(
-                                                color: Colors.white))),
-                                  ],
-                                )),
-                              );
-                            } else {
-                              return Center(
-                                child: Text("No Data"),
-                              );
-                            }
-                          });
-                      //return Text('${snapshot.data}', textAlign: TextAlign.center, style: TextStyle(color: Color(0XFF118C4F), fontWeight: FontWeight.w600, fontFamily: "sarabun", fontSize: 20),);
-                    } else {
-                      print("This works...");
-                      return CircularProgressIndicator();
-                    }
-                  },
-                ),
-              ),
+                                    return TransactionsCard(
+                                        height,
+                                        width,
+                                        true,
+                                        Name[index],
+                                        formatedDate,
+                                        amount,
+                                        context,
+                                        false);
+                                    //   Card(
+                                    //   //green
+                                    //   color: Color(0xFF118C4F),
+                                    //   child: Container(
+                                    //       child: Row(
+                                    //     mainAxisAlignment: MainAxisAlignment.center,
+                                    //     children: [
+                                    //       Container(
+                                    //         margin:
+                                    //             EdgeInsets.only(left: width / 100),
+                                    //         child: CircleAvatar(
+                                    //           backgroundImage: AssetImage(
+                                    //               "assets/images/photoIdentite.jpg"),
+                                    //           radius: 20,
+                                    //         ),
+                                    //       ),
+                                    //       Container(
+                                    //         margin: EdgeInsets.only(
+                                    //             left: width / 50, top: height / 70),
+                                    //         child: Column(
+                                    //           crossAxisAlignment:
+                                    //               CrossAxisAlignment.center,
+                                    //           children: [
+                                    //             Text(
+                                    //               refence,
+                                    //               style:
+                                    //                   TextStyle(color: Colors.white),
+                                    //             ),
+                                    //             Container(
+                                    //                 //margin: EdgeInsets.only(left: width/27),
+                                    //                 child: Text(formatedDate,
+                                    //                     style: TextStyle(
+                                    //                         color: Colors.white))),
+                                    //           ],
+                                    //         ),
+                                    //       ),
+                                    //       Container(
+                                    //           margin:
+                                    //               EdgeInsets.only(left: width / 2.5),
+                                    //           child: Text(
+                                    //               snapshot.data[index]['amount']
+                                    //                       .toString() +
+                                    //                   "€",
+                                    //               style: TextStyle(
+                                    //                   color: Colors.white))),
+                                    //     ],
+                                    //   )),
+                                    // );
+                                  } else {
+                                    return Center(
+                                      child: Text("No Data"),
+                                    );
+                                  }
+                                });
+                            //return Text('${snapshot.data}', textAlign: TextAlign.center, style: TextStyle(color: Color(0XFF118C4F), fontWeight: FontWeight.w600, fontFamily: "sarabun", fontSize: 20),);
+                          } else {
+                            print("This works...");
+                            return Center(child: CircularProgressIndicator());
+                          }
+                        },
+                      ),
+                    )
+                  : CircularProgressIndicator()
               ////////////////////////////////////////////////////////////////////////feth//////
 
               // Container(

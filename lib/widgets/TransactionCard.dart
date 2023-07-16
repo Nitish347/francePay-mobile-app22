@@ -4,19 +4,27 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../Constants/Constants.dart';
+import '../app/service/network_handler/networkhandler.dart';
+import '../app/views/pages/CurrentTransaction.dart';
 
 Widget TransactionsCard(double height, double width, bool credited, String name,
     String dateTime, String amount, BuildContext context, bool req) {
   return InkWell(
     onTap: () {
-      // Navigator.push(
-      //     context,
-      //     CupertinoPageRoute(
-      //         builder: (context) => credited
-      //             ? CurrentTransaction(
-      //           amount: "",
-      //         )
-      //             : TransactionDetail()));
+      Navigator.push(
+          context,
+          CupertinoPageRoute(
+              builder: (context) =>
+                  // credited
+                  //     ?
+                  CurrentTransaction(
+                    credited: credited,
+                    amount: int.parse(amount).abs().toString(),
+                    to: name,
+                    from: "",
+                  )
+              // : TransactionDetail()
+              ));
     },
     child: Container(
       height: height / 10,
@@ -38,8 +46,8 @@ Widget TransactionsCard(double height, double width, bool credited, String name,
                     padding: EdgeInsets.all(height * 0.017),
                     child: CircleAvatar(
                       radius: height * 0.025,
-                      backgroundImage:
-                          AssetImage("assets/images/photoIdentite.jpg"),
+                      backgroundImage: NetworkImage(
+                          "https://thumbs.dreamstime.com/b/default-avatar-profile-icon-vector-unknown-social-media-user-photo-default-avatar-profile-icon-vector-unknown-social-media-user-184816085.jpg"),
                     ),
                   ),
                   Column(
@@ -60,7 +68,7 @@ Widget TransactionsCard(double height, double width, bool credited, String name,
                                 fontSize: height * 0.015),
                           ),
                           Text(
-                            req ? name : "${name}@fpay",
+                            req ? name : "${name}",
                             style: GoogleFonts.sarabun(
                                 color: Colors.white,
                                 fontWeight: FontWeight.w500,
@@ -88,7 +96,11 @@ Widget TransactionsCard(double height, double width, bool credited, String name,
                 height: height * 0.05,
                 // color: Colors.black,
                 child: Text(
-                  req ? amount : "€ $amount",
+                  req
+                      ? amount
+                      : credited
+                          ? "€ +$amount"
+                          : "€ $amount",
                   style: GoogleFonts.sarabun(
                       color: Colors.white,
                       fontWeight: FontWeight.w600,
